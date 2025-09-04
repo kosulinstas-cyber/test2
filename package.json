@@ -1,0 +1,16 @@
+{
+  "name": "lifeflow-mvp-bot",
+  "version": "1.0.0",
+  "description": "Telegram bot for LifeFlow MVP",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "node-telegram-bot-api": "^0.64.0",
+    "@supabase/supabase-js": "^2.38.0"
+  },
+  "engines": {
+    "node": "18.x"
+  }
+}
