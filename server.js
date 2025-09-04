@@ -71,12 +71,41 @@ bot.on('message', async (msg) => {
   }
 
   // Ожидаем первое решение
-  if (userStates[userId] && userStates[userId].awaiting === 'first_decision') {
-    // Пока просто парсим вручную. Позже заменим на кнопки.
-    bot.sendMessage(chatId, `Супер! Твое решение "${text}" записано. Это твой первый шаг в аудите эффективности. Чтобы добавить следующее решение, используй команду /add.`);
-    delete userStates[userId]; // Очищаем состояние
+if (userStates[userId] && userStates[userId].awaiting === 'first_decision') {
+  // Парсим текст сообщения. Ожидаем формат "Текст решения (+1)"
+  const match = text.match(/(.+)\s\(([+-]?\d)\)/); // Ищет текст и цифру в скобках
+  
+  if (!match) {
+    bot.sendMessage(chatId, 'Неверный формат. Пожалуйста, напиши в формате: "Текст решения (+1)"');
     return;
   }
+  
+  const decisionText = match[1].trim();
+  const impactScore = parseInt(match[2]);
+  
+  // Сохраняем решение в базу данных
+  const { error } = await supabase
+    .from('decisions')
+    .insert([
+      { 
+        user_id: userId, 
+        decision_text: decisionText, 
+        impact_score: impactScore 
+      }
+    ]);
+  
+  if (error) {
+    console.error('Ошибка сохранения:', error);
+    bot.sendMessage(chatId, 'Не удалось сохранить решение. Попробуй еще раз.');
+  } else {
+    bot.sendMessage(chatId, `Отлично! Решение "${decisionText}" с оценкой ${impactScore} записано. Это твой первый шаг!`);
+    // Показываем главное меню
+    showMainMenu(chatId, userStates[userId].goal); // Нужно будет хранить цель в состоянии
+  }
+  // Очищаем состояние
+  delete userStates[userId];
+  return;
+}
 
   // Обработка кнопок главного меню
   switch (text) {
