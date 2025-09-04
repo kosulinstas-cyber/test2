@@ -69,7 +69,6 @@ bot.on('message', async (msg) => {
     }
     return;
   }
-
 // Ожидаем первое решение
 if (userStates[userId] && userStates[userId].awaiting === 'first_decision') {
   // Парсим текст сообщения. Ожидаем формат "Текст решения (+1)"
@@ -93,14 +92,13 @@ if (userStates[userId] && userStates[userId].awaiting === 'first_decision') {
         impact_score: impactScore 
       }
     ]);
-
- if (error) {
+if (error) {
   console.error(error);
-  bot.sendMessage(chatId, 'Произошла ошибка. Попробуй еще раз.');
+  bot.sendMessage(chatId, Произошла ошибка. Попробуй еще раз.);
 } else {
   // Сохраняем не только состояние, но и цель
   userStates[userId] = { awaiting: 'first_decision', goal: text };
-  bot.sendMessage(chatId, `Отлично! Цель "${text}" сохранена. Теперь давай оценим твое первое решение. Напиши, какое решение ты принял сегодня и как оно повлияло на цель. Например: "Купил кофе с собой (-1)"`);
+  bot.sendMessage(chatId, Отлично! Цель ${text} сохранена. Теперь давай оценим твое первое решение. Напиши, какое решение ты принял сегодня и как оно повлияло на цель. Например: Купил кофе с собой (-1)`);
 }
   // Очищаем состояние
   delete userStates[userId];
