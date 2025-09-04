@@ -75,7 +75,7 @@ if (userStates[userId] && userStates[userId].awaiting === 'first_decision') {
   const match = text.match(/(.+)\s\(([+-]?\d)\)/); // Ищет текст и цифру в скобках
   
   if (!match) {
-    bot.sendMessage(chatId, 'Неверный формат. Пожалуйста, напиши в формате: "Текст решения (+1)"');
+    bot.sendMessage(chatId, Неверный формат. Пожалуйста, напиши в формате: "Текст решения (+1)');
     return;
   }
   
