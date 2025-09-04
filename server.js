@@ -70,7 +70,7 @@ bot.on('message', async (msg) => {
     return;
   }
 
-  // Ожидаем первое решение
+// Ожидаем первое решение
 if (userStates[userId] && userStates[userId].awaiting === 'first_decision') {
   // Парсим текст сообщения. Ожидаем формат "Текст решения (+1)"
   const match = text.match(/(.+)\s\(([+-]?\d)\)/); // Ищет текст и цифру в скобках
@@ -93,20 +93,20 @@ if (userStates[userId] && userStates[userId].awaiting === 'first_decision') {
         impact_score: impactScore 
       }
     ]);
-  
-  if (error) {
-    console.error('Ошибка сохранения:', error);
-    bot.sendMessage(chatId, 'Не удалось сохранить решение. Попробуй еще раз.');
-  } else {
-    bot.sendMessage(chatId, `Отлично! Решение "${decisionText}" с оценкой ${impactScore} записано. Это твой первый шаг!`);
-    // Показываем главное меню
-    showMainMenu(chatId, userStates[userId].goal); // Нужно будет хранить цель в состоянии
-  }
+
+ if (error) {
+  console.error(error);
+  bot.sendMessage(chatId, 'Произошла ошибка. Попробуй еще раз.');
+} else {
+  // Сохраняем не только состояние, но и цель
+  userStates[userId] = { awaiting: 'first_decision', goal: text };
+  bot.sendMessage(chatId, `Отлично! Цель "${text}" сохранена. Теперь давай оценим твое первое решение. Напиши, какое решение ты принял сегодня и как оно повлияло на цель. Например: "Купил кофе с собой (-1)"`);
+}
   // Очищаем состояние
   delete userStates[userId];
   return;
 }
-
+  
   // Обработка кнопок главного меню
   switch (text) {
     case 'Добавить решение':
