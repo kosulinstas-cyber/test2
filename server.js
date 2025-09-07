@@ -3,9 +3,9 @@ const TelegramBot = require('node-telegram-bot-api');
 const { createClient } = require('@supabase/supabase-js');
 
 // Токены и ключи (ЗАМЕНИ НА СВОИ!)
-const token = "8366063716:AAFvXkN8HZCwdAomH1NqLmgGjUaasoKls6Q"; // Добавлены кавычки
-const supabaseUrl = "https://awdwayxizduqprjeqyyb.supabase.co"; // Добавлены кавычки
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF3ZHdheXhpemR1cXByamVxeXliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcwMDEzODgsImV4cCI6MjA3MjU3NzM4OH0.jiqDdWHDlpabwD_ohNjfqHRmps-p-ds4T9a7Wbdst6Y"; // Добавлены кавычки
+const token = "8366063716:AAFvXkN8HZCwdAomH1NqLmgGjUaasoKls6Q";
+const supabaseUrl = "https://awdwayxizduqprjeqyyb.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF3ZHdheXhpemR1cXByamVxeXliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcwMDEzODgsImV4cCI6MjA3MjU3NzM4OH0.jiqDdWHDlpabwD_ohNjfqHRmps-p-ds4T9a7Wbdst6Y";
 
 // Инициализируем клиентов
 const bot = new TelegramBot(token, { polling: true });
@@ -28,7 +28,7 @@ bot.onText(/\/start/, async (msg) => {
 
   if (userError || !userData || !userData.current_goal) {
     // Если цели нет, просим установить
-    bot.sendMessage(chatId, "Привет! Я помогу тебе отслеживать, как твои ежедневные решения влияют на главную цель. Для начала напиши свою основную цель одной строкой (например, \"Накопить на новый ноутбук\")."); // Добавлены кавычки
+    bot.sendMessage(chatId, "Привет! Я помогу тебе отслеживать, как твои ежедневные решения влияют на главную цель. Для начала напиши свою основную цель одной строкой (например, \"Накопить на новый ноутбук\").");
     userStates[userId] = { awaiting: 'goal' }; // Сохраняем состояние
   } else {
     // Если цель есть, показываем меню
@@ -38,9 +38,9 @@ bot.onText(/\/start/, async (msg) => {
 
 // Функция показа главного меню
 function showMainMenu(chatId, goal) {
-  bot.sendMessage(chatId, `Приветствую! Твоя текущая цель: "${goal}". Чем займемся?`, { // Исправлены кавычки и шаблонная строка
+  bot.sendMessage(chatId, `Приветствую! Твоя текущая цель: "${goal}". Чем займемся?`, {
     reply_markup: {
-      keyboard: [["Добавить решение"], ["Мой вклад за сегодня"]], // Добавлены кавычки
+      keyboard: [["Добавить решение"], ["Мой вклад за сегодня"]],
       resize_keyboard: true
     }
   });
@@ -64,7 +64,7 @@ bot.on('message', async (msg) => {
       console.error(error);
       bot.sendMessage(chatId, 'Произошла ошибка. Попробуй еще раз.');
     } else {
-      bot.sendMessage(chatId, `Отлично! Цель "${text}" сохранена. Теперь давай оценим твое первое решение. Напиши, какое решение ты принял сегодня и как оно повлияло на цель. Например: "Купил кофе с собой (-1)"`); // Исправлены кавычки
+      bot.sendMessage(chatId, `Отлично! Цель "${text}" сохранена. Теперь давай оценим твое первое решение. Напиши, какое решение ты принял сегодня и как оно повлияло на цель. Например: "Купил кофе с собой (-1)"`);
       userStates[userId] = { awaiting: 'first_decision' }; // Меняем состояние
     }
     return;
@@ -76,7 +76,7 @@ bot.on('message', async (msg) => {
     const match = text.match(/(.+)\s\(([+-]?\d)\)/); // Ищет текст и цифру в скобках
     
     if (!match) {
-      bot.sendMessage(chatId, "Неверный формат. Пожалуйста, напиши в формате: \"Текст решения (+1)\""); // Добавлены кавычки
+      bot.sendMessage(chatId, "Неверный формат. Пожалуйста, напиши в формате: \"Текст решения (+1)\"");
       return;
     }
     
@@ -96,7 +96,7 @@ bot.on('message', async (msg) => {
 
     if (error) {
       console.error(error);
-      bot.sendMessage(chatId, "Произошла ошибка. Попробуй еще раз."); // Добавлены кавычки
+      bot.sendMessage(chatId, "Произошла ошибка. Попробуй еще раз.");
     } else {
       // Показываем главное меню после успешного сохранения
       const { data: userData } = await supabase
@@ -114,13 +114,13 @@ bot.on('message', async (msg) => {
   
   // Обработка кнопок главного меню
   switch (text) {
-    case "Добавить решение": // Добавлены кавычки
-      bot.sendMessage(chatId, "Введите решение и его оценку (пока в формате \"Текст решения (+2)\")"); // Добавлены кавычки
+    case "Добавить решение":
+      bot.sendMessage(chatId, "Введите решение и его оценку (пока в формате \"Текст решения (+2)\")");
       break;
-    case "Мой вклад за сегодня": // Добавлены кавычки
-      bot.sendMessage(chatId, "Функция в разработке. Скоро здесь будет статистика!"); // Добавлены кавычки
+    case "Мой вклад за сегодня":
+      bot.sendMessage(chatId, "Функция в разработке. Скоро здесь будет статистика!");
       break;
   }
 });
 
-console.log("Бот запущен и работает в режиме polling..."); // Добавлены кавычки
+console.log("Бот запущен и работает в режиме polling...");
